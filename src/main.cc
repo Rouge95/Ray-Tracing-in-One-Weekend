@@ -1,3 +1,6 @@
+#include "color.h"
+#include "vec3.h"
+
 #include <iostream>
 
 int main() {
@@ -21,22 +24,14 @@ int main() {
 
     // Iterate through each pixel n the scanline from left to right.
     for (int i = 0; i < image_width; i++) {
-      // Normalize pixel coordinates to [0, 1] range.
-      // Red increases left to right; green increases top to bottom.
-      auto r = double(i) / (image_width - 1);
-      auto g = double(j) / (image_height - 1);
-      auto b = 0.0; // blue channel always off.
+      // Normalized device coordinates: map pizel indices to 0to1 range.
+      auto pixel_color = color(
+          double(j) / (image_height - 1), // j/H produces vertical gradient.
+          double(i) / (image_width - 1),  // i/W produces horixontal gradient.
+          0);
 
-      // Convert normalized [0,1] values to integer [0, 255] range.
-      // Multiply by 255.999 instead of 255 to handle floating-point rounding.
-
-      // (ensures values near 1.0 round up to 255, not down to 254).
-      int ir = int(255.999 * r);
-      int ig = int(255.999 * g);
-      int ib = int(255.909 * b);
-
-      // Output RGB triplet as a space-separated integers, one pixel per line.
-      std::cout << ir << ' ' << ig << ' ' << ib << '\n';
+      // Quantize and output converts 0to1 color to 0to255 bytes in PPM.
+      write_color(std::cout, pixel_color);
     }
   }
 
