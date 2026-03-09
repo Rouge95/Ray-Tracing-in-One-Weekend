@@ -25,6 +25,8 @@ public:
   // Unary negation: additive inverse (directional reversal, geometric
   // reflection).
   vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
+  double operator[](int i) const { return e[i]; }
+  double &operator[](int i) { return e[i]; }
 
   // Index operators: read-only and mutable access for generic algorithms.
   vec3 &operator+=(const vec3 &v) {
